@@ -1,0 +1,46 @@
+﻿@using Practice.Models.ODataTable
+@{
+    ViewBag.Title = "Contact";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+@Html.ODataTable(new Settings
+{
+    Selector = new Selector { Url = "/data/DistinctUserIds", ValueField = "Id", TextField = "Name", FilterFieldName = "User_Id" },
+    Table = new Table
+    {
+        DataSource = "/odata/Event?$expand=User,SourceReliability",
+        Columns = new string[] { "Id", "Text", "Time", "Contact", "Topic", "SourceReliability" },
+        ColumnNames = new string[] { "Id", "Event", "Time", "Contact", "Topic", "Source Reliability" },
+        CustomReadScenarios = new Dictionary<string, string> { 
+            { "SourceReliability", "function (item) {return item.SourceReliability.Text;}" },
+            { "Time", "function (item) {return new Date(item.Time).toDateString();}" }
+        }
+    }
+})
+
+   @*//    {
+    //    selector: {
+    //        url: '/data/DistinctUserIds',
+    //        valueField: 'Id',
+    //        textField: 'Name',
+    //        filterFieldName: 'User_Id'
+    //    },
+    //    table: {
+    //        dataSource: '/odata/Event?$expand=User,SourceReliability',
+    //        columnNames: ['Id', 'Event', 'Time', 'Contact', 'Topic', 'Source Reliability'],
+    //        columns: ['Id', 'Text', 'Time', 'Contact', 'Topic', 'SourceReliability'],
+    //        customReadScenarios: {
+    //            User: function (item) {
+    //                return item.User.Name;
+    //            },
+    //            SourceReliability: function (item) {
+    //                return item.SourceReliability.Text;
+    //            },
+    //            Time: function (item) {
+    //                return new Date(item.Time).toDateString();
+    //            }
+    //        }
+    //    }
+    //}*@
